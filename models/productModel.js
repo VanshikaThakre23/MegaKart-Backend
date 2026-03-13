@@ -9,6 +9,8 @@ const productSchema = mongoose.Schema({
     newPrice: Number,
     discount: String,
     rating:Number,
+    isPopular:{type:Boolean, default:false,},
+    isLatest:{type:Boolean, default:false,},
 })
 
 

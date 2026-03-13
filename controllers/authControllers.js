@@ -50,7 +50,13 @@ module.exports.loginUser = async (req, res) => {
       secure: false,
       sameSite: "lax"
     });
-    return res.status(200).json({ message: "Yeahh you are logged in " });
+    return res.status(200).json({
+      message: "Yeahh you are logged in ",
+      user: {
+        email: user.email,
+        role: user.role
+      }
+    });
 
   }
   catch (error) {
@@ -69,23 +75,29 @@ module.exports.logoutUser = (req, res) => {
   }
 }
 
-module.exports.addAddress = async (req,res)=>{
-      try {
-        const user = await userModel.findById(req.user._id);
-
-        if (!user) {
-            return res.status(404).json({ message: "User not found" });
-        }
-
-        user.addresses.push(req.body);
-        await user.save();
-
-        res.status(200).json({ user });
-
-    } catch (error) {
-        console.log(error);
-        res.status(500).json({ message: "Server error" });
+module.exports.addAddress = async (req, res) => {
+  try {
+       if (!req.body.city || !req.body.phone) {
+      return res.status(400).json({ message: "Incomplete address" });
     }
-}
 
+    const user = await userModel.findById(req.user._id);
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    user.addresses = req.body.addresses;   // replace whole array
+
+    await user.save();
+
+    res.status(200).json({ user });
+
+  } catch (error) {
+
+    console.log(error);
+    res.status(500).json({ message: "Server error" });
+
+  }
+};
 

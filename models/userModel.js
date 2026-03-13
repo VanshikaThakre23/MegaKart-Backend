@@ -17,7 +17,8 @@ const userSchema = mongoose.Schema({
     password:String,
     role:{
         type:String,
-        default:"user"
+        enum:["admin","user"],
+        default:"user",
     },
     addresses:[addressSchema],//isme ek se jyada address store honge qki isko array me store krrhe []
 })
