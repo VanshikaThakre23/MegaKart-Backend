@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 const productSchema = mongoose.Schema({
     img: { type: String, default: null }, // Must be String to store the Cloudinary URL
   alternateimg: { type: String, default: null },
-    category: String,
+    category: { type: [String], required: true },
     title: String,
     oldPrice: Number,
     newPrice: Number,
