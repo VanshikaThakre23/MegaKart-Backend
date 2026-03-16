@@ -28,8 +28,8 @@ router.get("/totalProducts", async (req, res) => {
 
 router.get("/popular", async (req, res) => {
     try {
-        const isPopular = await Product.find({ isPopular: true }).limit(10);;
-        res.json({ isPopular });
+        const product = await Product.find({ isPopular: true }).limit(10);;
+        res.json(product );
     } catch (error) {
         console.log(error);
         res.status(500).json({ message: error });
@@ -39,13 +39,31 @@ router.get("/popular", async (req, res) => {
 
 router.get("/latest", async (req, res) => {
     try {
-        const isLatest = await Product.find({ isLatest: true }).limit(10);
-        res.json({ isLatest });
+        const product = await Product.find({ isLatest: true }).limit(10);
+        res.json( product );
     } catch (error) {
         console.log(error);
         res.status(500).json({ message: error });
     }
 })
+
+router.get("/:id", async (req,res)=>{
+  try{
+    const product = await Product.findById(req.params.id)
+    res.json(product)
+  }catch(err){
+    res.status(500).json({message:err})
+  }
+});
+
+router.delete("/:id", async (req, res) => {
+  try {
+    await Product.findByIdAndDelete(req.params.id);
+    res.json({ message: "Product deleted" });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
 
 
 
@@ -72,13 +90,12 @@ router.post("/", upload.fields([
         // 3. Create database entry with the Cloudinary URLs
         const newProduct = await Product.create({
             title: req.body.title,
-            category: req.body.category,
+            category: JSON.parse(req.body.category),
             oldPrice: req.body.oldPrice,
             newPrice: req.body.newPrice,
             discount: req.body.discount,
-            img: imgUrl,           // This is the secure_url from Cloudinary
+            img: imgUrl,
             alternateimg: altImgUrl,
-
             isPopular: req.body.popularSection === "true",
             isLatest: req.body.latestSection === "true",
         });
