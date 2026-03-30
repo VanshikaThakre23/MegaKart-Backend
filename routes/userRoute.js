@@ -6,40 +6,56 @@ const router = express.Router();
 
 
 
-router.get('/user',(req,res)=>{
-res.send('user route');
+router.get('/user', (req, res) => {
+  res.send('user route');
 })
 
 router.get("/me", isLoggedIn, (req, res) => {
   res.status(200).json({ user: req.user });
 });
 
-router.get("/totalUser", async(req,res) => {
-  try{
+router.get("/totalUser", async (req, res) => {
+  try {
     const totalUser = await User.countDocuments();
-    res.json({totalUser});
+    res.json({ totalUser });
   }
-  catch(error){
-    res.status(500).json({message:error});
+  catch (error) {
+    res.status(500).json({ message: error });
   }
 });
 
-router.get("/viewUser", async(req,res) => {
+router.get("/viewUser", async (req, res) => {
   try {
     const allUserDetails = await User.find().select("name email addresses");
     res.json({ users: allUserDetails });
-    
+
   } catch (error) {
-    res.status(500).json({message:error});
+    res.status(500).json({ message: error });
   }
 })
 
+router.get("/cart", isLoggedIn, async (req, res) => {
+  try {
+    const user = await User.findById(req.user.id,).populate("cart")
+    res.json(user.cart)
+  } catch (error) {
+    res.status(500).json({ meaage: error.message });
+  }
 
- 
-router.post("/add-address",isLoggedIn,addAddress )
+});
 
-router.post("/register",registerUser);
-router.post("/login",loginUser);
+router.get("/wishlist", async (req,res)=>{
+  const user = await User.findById(req.user.id).populate("wishlist");
+  res.json(user.wishlist);
+})
+
+
+
+
+router.post("/add-address", isLoggedIn, addAddress)
+
+router.post("/register", registerUser);
+router.post("/login", loginUser);
 router.get("/logout", logoutUser);
 
 module.exports = router;

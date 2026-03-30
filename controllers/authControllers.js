@@ -53,8 +53,9 @@ module.exports.loginUser = async (req, res) => {
     return res.status(200).json({
       message: "Yeahh you are logged in ",
       user: {
+        _id: user._id,  
         email: user.email,
-        role: user.role
+        role: user.role,
       }
     });
 

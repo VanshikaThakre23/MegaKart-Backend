@@ -67,6 +67,7 @@ router.delete("/:id", async (req, res) => {
 
 
 
+
 router.post("/", upload.fields([
     { name: "img", maxCount: 1 },
     { name: "alternateimg", maxCount: 1 }
