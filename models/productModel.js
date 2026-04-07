@@ -1,19 +1,19 @@
 const mongoose = require("mongoose");
 
 const productSchema = mongoose.Schema({
-    img: { type: String, default: null }, // Must be String to store the Cloudinary URL
-  alternateimg: { type: String, default: null },
+    img: { type: String, default: null },
+    alternateimg: { type: String, default: null },
     category: { type: [String], required: true },
-    title: String,
-    oldPrice: Number,
-    newPrice: Number,
-    discount: String,
-    rating:Number,
-    isPopular:{type:Boolean, default:false,},
-    isLatest:{type:Boolean, default:false,},
-})
+    subCategory: { type: [String], required: true },
+    title: { type: String, required: true },
+    oldPrice: { type: Number, required: true },
+    newPrice: { type: Number, required: true },
+    discount: { type: String },
+    rating: { type: Number, default: 4 },
+    isPopular: { type: Boolean, default: false },
+    isLatest: { type: Boolean, default: false },
+}, {
+    timestamps: true
+});
 
-
-module.exports = mongoose.model("products", productSchema);
-
-// export const product = mongoose.model("product",productSchema);
+module.exports = mongoose.model("Product", productSchema);

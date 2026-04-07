@@ -1,40 +1,23 @@
 const mongoose = require('mongoose');
 
-const addressSchema = new mongoose.Schema({
-  fullName: String,
-  phone: String,
-  pincode: String,
-  city: String,
-  state: String,
-  houseNo: String,
-  area: String,
-  landmark: String
-})
+
 
 const userSchema = mongoose.Schema({
   name: String,
   email: String,
+  phone:String,
   password: String,
   role: {
     type: String,
     enum: ["admin", "user"],
     default: "user",
   },
-  addresses: [addressSchema],//isme ek se jyada address store honge qki isko array me store krrhe []
-  //     cart: [
-  //   {
-  //     productId: String,
-  //     title: String,
-  //     img: String,
-  //     price: Number,
-  //     quantity: Number
-  //   }
-  // ]
+
   cart: [
     {
       product: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "Product"
+        ref: "Pzroduct"
       },
       quantity: {
         type: Number,

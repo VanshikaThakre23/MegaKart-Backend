@@ -1,6 +1,6 @@
 const express = require('express');
 const isLoggedIn = require("../middleware/isLoggedIn");
-const { registerUser, loginUser, logoutUser, addAddress } = require('../controllers/authControllers');
+const { registerUser, loginUser, logoutUser,  } = require('../controllers/authControllers');
 const User = require('../models/userModel');
 const router = express.Router();
 
@@ -74,8 +74,6 @@ router.post("/add-to-cart", isLoggedIn, async (req, res) => {
 });
 
 
-
-router.post("/add-address", isLoggedIn, addAddress)
 
 router.post("/register", registerUser);
 router.post("/login", loginUser);

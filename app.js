@@ -3,6 +3,9 @@ const dotenv = require ('dotenv');
 dotenv.config();
 const mongoose = require('mongoose');
 
+const fs = require("fs");
+const path = require("path")
+
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
 
@@ -19,7 +22,8 @@ mongoose.connect(process.env.MONGO_URI)
 
 // router path
 const userRouter = require('./routes/userRoute.js');
-const productRouter = require('./routes/productRoute.js')
+const productRouter = require('./routes/productRoute.js');
+const addressRouter = require('./routes/addressRoutes.js');
 
 app.use(cors({
     origin:"http://localhost:5173",
@@ -39,6 +43,13 @@ app.get("/",(req,res)=>{
 
 app.use("/user" , userRouter);
 app.use("/products", productRouter);
+app.use("/address",addressRouter);
+
+const uploadDir = path.join(__dirname,"uploads");
+if(!fs.existsSync(uploadDir)){
+    fs.mkdirSync(uploadDir,{recursive:true});
+    console.log("Created uploads directory")
+}
 
 app.listen(PORT, ()=>{
     console.log(`server running on ${PORT}`);

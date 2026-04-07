@@ -8,24 +8,21 @@ cloudinary.config({
   api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
-const uploadOnCloudinary = async (filePath) => {
-  try {
-    if (!filePath) return null;
-    const fixedPath = filePath.replace(/\\/g, "/");
-    const result = await cloudinary.uploader.upload(fixedPath, {
-      folder: "ecommerce_products",
+const uploadOnCloudinary = async (fileBuffer, originalName) => {
+    return new Promise((resolve, reject) => {
+        const uploadStream = cloudinary.uploader.upload_stream(
+            {
+                folder: "ecommerce_products",
+                public_id: `product_${Date.now()}_${originalName}`,
+            },
+            (error, result) => {
+                if (error) reject(error);
+                else resolve(result.secure_url);
+            }
+        );
+        
+        uploadStream.end(fileBuffer);
     });
-
-    // Remove file from local storage after successful upload
-    fs.unlinkSync(filePath); 
-    
-    return result.secure_url;
-  } catch (error) {
-    // Also remove file if upload fails to keep storage clean
-    if (fs.existsSync(filePath)) fs.unlinkSync(filePath);
-    console.log("Cloudinary Upload Error:", error);
-    return null;
-  }
 };
 
 module.exports = uploadOnCloudinary;
