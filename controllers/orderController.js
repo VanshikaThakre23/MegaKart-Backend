@@ -3,7 +3,7 @@ const orderModel = require("../models/orderModel.js");
 exports.placeOrder = async(req,res)=>{
     try {
         const {items , addresses , totalAmount ,paymentMethod} = req.body;
-        const newOrder= new Order({
+        const newOrder= new orderModel({
         user : req.user._id,
         items,
         addresses,
