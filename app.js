@@ -27,9 +27,12 @@ const addressRouter = require('./routes/addressRoutes.js');
 const orderRouter = require('./routes/orderRoutes.js');
 
 app.use(cors({
-    origin:"http://localhost:5173",
-    credentials:true
-}))
+  origin: [
+    "http://localhost:5173",
+    "https://megakart.netlify.app"
+  ],
+  credentials: true
+}));
 
 // middleware stup
 app.use(express.json());
