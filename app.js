@@ -24,6 +24,7 @@ mongoose.connect(process.env.MONGO_URI)
 const userRouter = require('./routes/userRoute.js');
 const productRouter = require('./routes/productRoute.js');
 const addressRouter = require('./routes/addressRoutes.js');
+const orderRouter = require('./routes/orderRoutes.js');
 
 app.use(cors({
     origin:"http://localhost:5173",
@@ -44,6 +45,7 @@ app.get("/",(req,res)=>{
 app.use("/user" , userRouter);
 app.use("/products", productRouter);
 app.use("/address",addressRouter);
+app.use("/order",orderRouter);
 
 const uploadDir = path.join(__dirname,"uploads");
 if(!fs.existsSync(uploadDir)){

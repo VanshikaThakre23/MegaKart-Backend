@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const Address = require("../models/addressModel"); 
 const isLoggedIn = require("../middleware/isLoggedIn");
+const User = require("../models/userModel");
 
 router.post("/giveAddress", isLoggedIn, async (req, res) => {
   try {
@@ -16,7 +17,7 @@ router.post("/giveAddress", isLoggedIn, async (req, res) => {
     }
 
     const newAddress = await Address.create({
-      user: req.user._id, // From auth middleware
+      user: req.user._id, 
       fullName,
       phone,
       pincode,
@@ -25,6 +26,10 @@ router.post("/giveAddress", isLoggedIn, async (req, res) => {
       houseNo,
       area
     });
+
+    await User.findByIdAndUpdate(req.user._id,{
+      $push:{addresses : newAddress._id}
+    })
 
     res.status(201).json({
       success: true,
@@ -41,7 +46,7 @@ router.post("/giveAddress", isLoggedIn, async (req, res) => {
   }
 });
 
-// ✅ READ - Get all addresses of logged-in user
+// Get all addresses of logged-in user
 router.get("/myAddress", isLoggedIn, async (req, res) => {
   try {
     const addresses = await Address.find({ user: req.user._id })
@@ -61,7 +66,7 @@ router.get("/myAddress", isLoggedIn, async (req, res) => {
   }
 });
 
-// ✅ UPDATE - Update address by ID
+//  Update address by ID
 router.put("/updateAddress/:id", isLoggedIn, async (req, res) => {
   try {
     const { id } = req.params;
@@ -77,7 +82,7 @@ router.put("/updateAddress/:id", isLoggedIn, async (req, res) => {
       });
     }
 
-    // Security: Ensure user owns this address
+    //checking that address user ka hi hai kya
     if (address.user.toString() !== req.user._id.toString()) {
       return res.status(403).json({
         success: false,
@@ -85,7 +90,6 @@ router.put("/updateAddress/:id", isLoggedIn, async (req, res) => {
       });
     }
 
-    // Update address
     const updatedAddress = await Address.findByIdAndUpdate(
       id,
       { fullName, phone, pincode, city, state, houseNo, area },
@@ -107,12 +111,10 @@ router.put("/updateAddress/:id", isLoggedIn, async (req, res) => {
   }
 });
 
-// ✅ DELETE - Delete address by ID
 router.delete("/deleteAddress/:id", isLoggedIn, async (req, res) => {
   try {
     const { id } = req.params;
 
-    // Find address and check ownership
     const address = await Address.findById(id);
 
     if (!address) {
@@ -122,7 +124,7 @@ router.delete("/deleteAddress/:id", isLoggedIn, async (req, res) => {
       });
     }
 
-    // Security: Ensure user owns this address
+    // Security = user ka hi address hai naa confirmm
     if (address.user.toString() !== req.user._id.toString()) {
       return res.status(403).json({
         success: false,

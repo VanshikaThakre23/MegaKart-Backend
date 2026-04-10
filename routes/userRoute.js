@@ -25,7 +25,7 @@ router.get("/totalUser", async (req, res) => {
 
 router.get("/viewUser", async (req, res) => {
   try {
-    const allUserDetails = await User.find().select("name email addresses");
+    const allUserDetails = await User.find({role:"user"}).populate("addresses").select("name email addresses");
     res.json({ users: allUserDetails });
 
   } catch (error) {
