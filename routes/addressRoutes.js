@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const Address = require("../models/addressModel"); 
-const isLoggedIn = require("../middleware/isLoggedIn");
+const { isLoggedIn } = require("../middleware/auth.middleware.js");
 const User = require("../models/userModel");
 
 router.post("/giveAddress", isLoggedIn, async (req, res) => {

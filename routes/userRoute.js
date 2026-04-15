@@ -1,5 +1,5 @@
 const express = require('express');
-const isLoggedIn = require("../middleware/isLoggedIn");
+const {isLoggedIn} = require("../middleware/auth.middleware");
 const { registerUser, loginUser, logoutUser,  } = require('../controllers/authControllers');
 const User = require('../models/userModel');
 const router = express.Router();
@@ -44,7 +44,7 @@ router.get("/cart", isLoggedIn, async (req, res) => {
 });
 
 router.get("/wishlist",isLoggedIn, async (req,res)=>{
-  const user = await User.findById(req.user.id).populate("wishlist");
+  const user = await User.findById(req.user._id).populate("wishlist");
   res.json(user.wishlist);
 })
 
