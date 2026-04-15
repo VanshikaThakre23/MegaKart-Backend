@@ -47,8 +47,8 @@ module.exports.loginUser = async (req, res) => {
     let token = generateToken(user);
     res.cookie("token", token, {
       httpOnly: true,
-      secure: false,
-      sameSite: "lax"
+     secure: true,      // REQUIRED for cross-site cookies
+  sameSite: "none",
     });
     return res.status(200).json({
       message: "Yeahh you are logged in ",

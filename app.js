@@ -26,12 +26,14 @@ const productRouter = require('./routes/productRoute.js');
 const addressRouter = require('./routes/addressRoutes.js');
 const orderRouter = require('./routes/orderRoutes.js');
 
+// Backend: server.js or app.js
+const cors = require('cors');
+
 app.use(cors({
-  origin: [
-    "http://localhost:5173",
-    "https://megakart.netlify.app"
-  ],
-  credentials: true
+  origin: 'https://megakart.netlify.app',
+  credentials: true,
+  methods: ["GET", "POST", "PUT", "DELETE"],
+  allowedHeaders: ["Content-Type", "Authorization"]
 }));
 
 // middleware stup
