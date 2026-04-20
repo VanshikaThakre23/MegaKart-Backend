@@ -15,9 +15,23 @@ mongoose.connect(process.env.MONGO_URI)
   .then(() => console.log("Done!!!!! mongodb connected"))
   .catch((err) => console.log("MongoDB connection error:", err));
 
+  const allowedOrigin = [
+    'https://megakart.netlify.app',
+    'http://localhost:5173'
+  ]
+
 // CORS Configuration - Must be the FIRST middleware
 app.use(cors({
-  origin: 'https://megakart.netlify.app', // No trailing slash
+  origin: function(origin,callback){
+if( !origin){
+  return callback(null,true)
+}
+if(allowedOrigin.includes(origin)){
+  callback(null,true);
+}else{
+  callback(new Error("Not allowed by  CORS"))
+}
+  },
   credentials: true,
   methods: ["GET", "POST", "PUT", "DELETE"],
   allowedHeaders: ["Content-Type", "Authorization"]
